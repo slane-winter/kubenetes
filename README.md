@@ -10,108 +10,55 @@ Getting started with kubernetes is straightfoward -  [follow this guide](https:/
 
 ## Configuration File
 
-Kubernetes will require a configuration file to connect to appropriate server. At this time my chosen computing cluster is [Nautilus](https://docs.nationalresearchplatform.org/)
-- Getting access required me to follow the steps outlined [here](https://github.com/MU-HPDI/nautilus/wiki/Getting-Started)
+Kubernetes will require a configuration file to connect to appropriate server. At this time, the chosen computing cluster is [Nautilus](https://dash.nrp-nautilus.io/)
+- Getting access required following the steps outlined [here](https://github.com/MU-HPDI/nautilus/wiki/Getting-Started)
 
 The coniguration file can be found [here](https://portal.nrp-nautilus.io/authConfig)
 - Note this requires an organization login
 - This needs to be placed at location `~/.kube/config` , so one can run something like `mv ~\Downloads\config ~/.kube/config`
 
+To verify configuration is setup properly one can run the following:
+- `kubectl get pods` : shows all accessible pods attached to the determined namespace
+- `kubectl config view --minify -o jsonpath='{..namespace}'` : shows the users namespace
 
-1) Create remote accessible docker image 
+## Kubernetes Examples
 
-    - Build docker image locally and push to docker hub (MacOS)
+If an example isn't covererd directly here, check out [this link](https://docs.nationalresearchplatform.org/).
 
-        - docker build --platform linux/x86_64 --rm -t [tag] [filepath]
+First, its important to [read about some basic terminology](https://www.vmware.com/topics/glossary/content/components-kubernetes.html).
 
-            - [tag] is a alias for the created docker image
+### Create Ineractive Kubernetes Environment
 
-                - naming can be local in format [tag_name] (e.g., testing) 
+This will create a pod with requested resouces (e.g., GPUs, CPUs, RAM). 
+- It revolves around 4 steps
+    - Create the docker image
+    - Define storage details via yaml
+    - Define pod details via yaml
+    - Enter pod container
 
-                - naming can be dockerhub format [namespace/repository_name/tag_name] (e.g., ctvqfq/bunny_ai:testing) 
+Create Docker Image (Remotely Accessible)
+- Build docker image locally and push to docker hub: `docker build --platform linux/x86_64 --rm -t [tag] [filepath]`
+    - Note that `--platform linux/x86_64` compiles for linux x86_64 devices
+    - `[tag]` : docker image alias, specified as local format `[tag_name]` or dockerhub format `[namespace/repository_name/tag_name]`
+        - Tag must be updated via `docker tag [tag_name] [namespace/repository_name/tag_name]` if not in dockerhub format. 
 
-            - Note that --platform linux/x86_64 compiles for linux x86_64 devices
+    - Check image creation: `docker images`
+    - Login to [dockerhub](https://hub.docker.com/): `docker login`
+    - Push image to dockerhub: `docker push [namespace/repository_name/tag_name]`
 
-        - Check image creation
+Define Storage Details as Persistent Volume Claim (PVC) storage
+- Using `data.yaml` or `result.yaml` as examples, create a custom yaml (a.k.a. `[pvc_filename]`) for data storage.
+- Afterwards, initialize the storage via : `kubectl apply -f [pvc_filename]`
+- Addtional options are the following
+  - Check all PVCs : `kubectl get pvc`
+  - Delete single pvc : `kubectl delete pvc [pcv_name]`
+  - Delete all pvcs : `kubectl delete pvc --all`
 
-            - docker images 
+Define Pod Details
+- Using `pod.yaml` as an example, createa a custom yaml for a pod. 
+- Afterwards, initialize the storage via : `kubectl apply -f [pod_filename]`
+    - Pod creation can take some time. Check verbose details of pod via : `kubectl describe pod [pod_name]`
+    - Check short details regarding all pods : `kubectl get pods`
 
-        - Login to dockerhub
-
-            - docker login
-
-        - Update image tag (Optional)
-
-             - docker tag [tag_name] [namespace/repository_name/tag_name]
-
-                - If one is trying to prepare a local image for dockerhub
-
-        - Push image to dockerhub
-
-            - docker push ctvqfq/bunny_ai:kube_tutorial
-
-        - Pull the docker container from dockerhub (Optional)
-
-            - docker pull docker.io/ctvqfq/bunny_ai:kube_tutorial
-
-    - Build via GitLab CLI (Not sure how to do yet)
-        
-        - TODO
-
-2) Manage volume storages
-
-    - Create Persistent Volume Claim (PVC) storage
-
-        - kubectl apply -f [pvc_filename]
-
-    - Check all PVCs
-    
-        - kubectl get pvc
-
-    - Delete PVC(s)
-    
-        - Delete single pvc
-        
-            - kubectl delete pvc [pcv_name]
-        
-        - Delete all pvcs
-
-            - kubectl delete pvc --all
-
-3) Manage kubernetes pod
-
-    - Create kubernetes pod
-
-        - kubectl apply -f [pod_filename]
-
-    - Check details of pod 
-
-        - kubectl describe pod [pod_name]
-
-        - This is useful for seeing creation details (e.g., when is it useable)
-
-    - Check short details regarding all pods
-
-        - kubectl get pods
-
-    - Create temporary kubernetes pod and run it for interactive testing
-
-        - kubectl run [pod_name] --image [path_container_image] --rm --tty -i -- [command]
-
-            - [pod_name] : name of pod 
-
-            - --image : flag for container image
-
-            - [path_container_image] : path to remote accessible docker image (e.g., docker.io/ctvqfq/bunny_ai:kube_tutorial)
-
-            - --rm : flag to delete pod upon pod completion
-    
-            - --tty & -i : flags for making interactive terminal session
-
-            - [command] : command to execute inside the pod. 
-
-        - Note that this doesn't appear to have configurable hardware support due to depreciation
-
-    - Create configurable kubernetes pod for interactive testing
-
-        - Create 
+Enter Pod Container
+- `kubectl exec -it [pod_name] -- /bin/bash`
