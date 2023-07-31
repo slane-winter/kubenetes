@@ -1,0 +1,35 @@
+apiVersion: v1
+
+kind: Pod
+
+metadata:
+  name: interactive
+
+spec:
+
+  containers:
+    - name: gpu-container
+      image: docker.io/ctvqfq/bunny_ai:kube_tutorial
+      stdin: True
+      tty: True
+      resources:
+        limits:
+          nvidia.com/gpu: "2"
+          memory: "16G"
+          cpu: "8"
+      volumeMounts:
+        - name: results
+          mountPath: /develop/results
+        - name: data
+          mountPath: /develop/data
+
+  volumes:
+    - name: data
+      persistentVolumeClaim:
+        claimName: data
+    - name: results
+      persistentVolumeClaim:
+        claimName: results
+
+  restartPolicy: Never
+
