@@ -39,12 +39,12 @@ This will create a pod with requested resouces (e.g., GPUs, CPUs, RAM).
 Create Docker Image (Remotely Accessible)
 - Build docker image locally and push to docker hub: `docker build --platform linux/x86_64 --rm -t [tag] [filepath]`
     - Note that `--platform linux/x86_64` compiles for linux x86_64 devices
-    - `[tag]` : docker image alias, specified as local format `[tag_name]` or dockerhub format `[namespace/repository_name/tag_name]`
-        - Tag must be updated via `docker tag [tag_name] [namespace/repository_name/tag_name]` if not in dockerhub format. 
+    - `[tag]` : docker image alias, specified as local format `[tag_name]` or dockerhub format `[namespace/repository_name:tag_name]`
+        - Tag must be updated via `docker tag [tag_name] [namespace/repository_name:tag_name]` if not in dockerhub format. 
 
     - Check image creation: `docker images`
     - Login to [dockerhub](https://hub.docker.com/): `docker login`
-    - Push image to dockerhub: `docker push [namespace/repository_name/tag_name]`
+    - Push image to dockerhub: `docker push [namespace/repository_name:tag_name]`
 
 Define Storage Details as Persistent Volume Claim (PVC) storage
 - Using `data.yaml` or `result.yaml` as examples, create a custom yaml (a.k.a. `[pvc_filename]`) for data storage.
