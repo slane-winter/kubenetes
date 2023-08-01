@@ -23,7 +23,7 @@ To verify configuration is setup properly one can run the following:
 
 ## Kubernetes Examples
 
-If an example isn't covererd directly here, check out [this link](https://docs.nationalresearchplatform.org/).
+If an example isn't covererd directly here, check out [link 1](https://docs.nationalresearchplatform.org/) and [link 2](https://github.com/Rose-STL-Lab/nautilus_tutorial/tree/main)
 
 First, its important to [read about some basic terminology](https://www.vmware.com/topics/glossary/content/components-kubernetes.html).
 
