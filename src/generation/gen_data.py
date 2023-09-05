@@ -131,7 +131,7 @@ def generate(path_save):
     
     # Gather: STL 10
 
-    path = os.path.join(path_save, "stl0")
+    path = os.path.join(path_save, "stl10")
 
     train, valid, test = load_stl(path)
 

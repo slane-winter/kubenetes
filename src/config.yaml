@@ -10,7 +10,7 @@ paths:
 
   # root_data: remote path to algorithm data root folder
 
-  root_data: /develop/data/demo
+  root_data: /develop/data
 
   # root_results: remote path to root of results folder
 
@@ -147,7 +147,7 @@ network:
 
     # num_epochs: number of training iterations
 
-    num_epochs: 200
+    num_epochs: 5
 
     # use_progress: start learning from previous save point
 
