@@ -20,6 +20,10 @@ paths:
 
   container_image: docker.io/ctvqfq/bunny_ai:demo-1.0
 
+  # pre_trained: remote path to pre-trained models
+
+  pre_trained: /develop/data/pre_trained_models
+  
   # job_files: local path to job file folder
   
   job_files: job_files
@@ -27,7 +31,6 @@ paths:
   # template: local path to kubernetes job template
   
   template: templates/job.txt
-
 
 # Parameters: Kubernetes Resources
 

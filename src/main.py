@@ -89,6 +89,7 @@ def update_params(params, args):
     # Update: Network Config
 
     params["network"]["num_classes"] = params["dataset"]["num_classes"]
+    os.environ["TORCH_HOME"] = params["paths"]["pre_trained"]
 
 # Validate: Configuration File
 
