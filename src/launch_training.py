@@ -119,7 +119,7 @@ def run_generation(params):
 
                     job_name = "%s-%s" % (params["helpers"]["kill_tag"], str(counter).zfill(6))
  
-                    path_log = os.path.join(params["paths"]["root_logs"], "%s_%s_%s.log" % (job_name, data_name, alg_name))
+                    path_log = os.path.join(params["paths"]["root_logs"], "%s.log" % (job_name))
 
                     if(sys.platform == "win32"):
                         path_log = path_log.replace("\\", "/") 
