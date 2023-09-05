@@ -70,16 +70,16 @@ def run_generation(params):
 
     # Load: Job Template
 
-    template = load_file(params["job_paths"]["template"])
+    template = load_file(params["paths"]["template"])
 
-    tag = params["job_paths"]["template"].split("/")[-1]
-    folder = params["job_paths"]["template"].replace("/%s" % tag, "")
+    tag = params["paths"]["template"].split("/")[-1]
+    folder = params["paths"]["template"].replace("/%s" % tag, "")
     environment = Environment(loader = FileSystemLoader(folder))
     template = environment.get_template(tag)
 
     # Launch: Simulation Jobs
 
-    create_folder(params["paths"]["job_files"])
+    create_folder(params["paths"]["files"])
 
     # - Begin: Algorithm Analysis
 
