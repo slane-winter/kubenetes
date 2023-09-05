@@ -37,7 +37,7 @@ class Classifier(torch.nn.Module):
 
         if(choice == 0):
 
-            self.architecture = torch.hub.load("pytorch/vision:v0.10.0", "resnet152", pretrained = True)
+            self.architecture = torch.hub.load("pytorch/vision:v0.10.0", "resnet152", pretrained = False)
 
             in_features = self.architecture.fc.in_features
             self.architecture.fc = torch.nn.Linear(in_features, num_classes)
@@ -48,7 +48,7 @@ class Classifier(torch.nn.Module):
 
         elif(choice == 1):
 
-            self.architecture = torch.hub.load("NVIDIA/DeepLearningExamples:torchhub", "nvidia_efficientnet_b0", pretrained = True)
+            self.architecture = torch.hub.load("NVIDIA/DeepLearningExamples:torchhub", "nvidia_efficientnet_b0", pretrained = False)
 
             all_targets = []
 
@@ -61,7 +61,7 @@ class Classifier(torch.nn.Module):
 
         elif(choice == 2):
 
-            self.architecture = torch.hub.load("pytorch/vision:v0.10.0", "alexnet", pretrained = True)
+            self.architecture = torch.hub.load("pytorch/vision:v0.10.0", "alexnet", pretrained = False)
 
             in_features = self.architecture.classifier[-1].in_features
             self.architecture.classifier[-1] = torch.nn.Linear(in_features, num_classes)
