@@ -9,7 +9,7 @@ spec:
         - name: data-gen-demo
           image: docker.io/ctvqfq/bunny_ai:demo
           command: ["/bin/sh", "-c"]
-          args: ["git clone https://github.com/slane-winter/kubenetes.git .; cd /develop/code/src; python main.py"]
+          args: ["git clone https://github.com/slane-winter/kubenetes.git .; cd /develop/code/src/generation; python gen_data.py"]
           resources:
             limits:
               memory: 32G
