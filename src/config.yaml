@@ -1,0 +1,151 @@
+# Configuration: Algorithm Training Demo - Kubernetes
+
+# Parameters: Kubernetes Paths
+
+paths:
+
+  # data_root: remote path to algorithm data root folder
+
+  data_root: /develop/data/demo
+
+  # results: remote path to root of results folder
+
+  results: /develop/results
+ 
+  # container_image: remote path to container image
+
+  container_image: docker.io/ctvqfq/bunny_ai:demo
+
+  # job_files: local path to job file folder
+  
+  job_files: job_files
+
+  # template: local path to kubernetes job template
+  
+  template: templates/job.txt
+
+
+# Parameters: Kubernetes Resources
+
+resources:
+
+  # namespace: name of nautilus namespace
+
+  namespace: gpn-mizzou-muem
+
+  # mem_lim: limits of random access memory
+
+  mem_req: 50G
+
+  # mem_req: requested random access memory
+
+  mem_lim: 100G
+
+  # cpus_per_op: number of cpus 
+
+  cpus_per_op: 40
+
+  # gpus_per_op: number of gpus
+
+  gpus_per_op: 2
+
+# Parameters: Automation Helpers
+
+helpers:
+
+  # parallel_ops: number of jobs happening in parallel (not kubernetes required)
+  
+  parallel_ops: 5
+
+  # kill_tag: key-phrase that distinguishes jobs from others inside of namespace (not kubernetes required)
+  
+  kill_tag: alg_demo
+
+  # alg_names: names of algorithm for automation
+
+  algorithm_names: ["0", "1", "2"]
+
+  # dataset_names: dataset names for automation
+  
+  dataset_names: ["cifar", "stl10"]
+
+# Parameters: Algorithm Host System
+
+system: 
+
+    # seed: deterministic randomization for reproducability
+    # - flag: signal to enable / disable
+    # - sequence: unique identifier
+
+    seed: {"flag": 0, "sequence": 123}
+
+    # num_workers: CPU workers for explicit data retrival. (set <= number cpu_cores)
+
+    num_workers: 8
+
+    # gpu_config: GPU configuration, formatted as [On (1) / Off (0), GPU indices]
+    
+    gpu_config:     
+        use_gpu: 1
+
+# Parameters: Algorithm Dataset
+
+dataset: 
+
+    # num_classes: number of supervised classes
+
+    num_classes: 10
+
+    # batch_size: sample group size of for network processing
+
+    batch_size: 64
+
+    # sample_shape: decides aspects of nerual system based off of shape (c, h, w)
+    # - if interpolation below is "1" then it will transform to this spatial shape
+
+    sample_shape: [3, 256, 256]
+
+    # transforms: problem defined data augmentations
+    # - 0: normalization, and standardization to range [-1, 1]
+    # - 1: random shifting, cropping, and brightness for training (as well as "0" transforms)
+    # - 2: center cropping for testing (as well as "0" transforms)
+
+    transforms: 1
+
+    # interpolate: adds a resize-like transform to the chosen set of transforms above based on sample shape above
+
+    interpolate: 1
+
+    # constrain: run test on constrained dataset
+    # - [on/off, percent of samples per class]
+
+    constrain: [0, 10]
+
+# Parameters: Algorithm
+
+network:
+
+    # deploy: testing or training network
+
+    deploy: 1
+    
+    # arch: specified network architecture
+
+    arch: 0
+
+    # learning_rate: degree of learning for gradient descent
+
+    learning_rate: 0.0003
+
+    # valid_rate: determines rate of validation inside the training process
+
+    valid_rate: 1
+
+    # num_epochs: number of training iterations
+
+    num_epochs: 200
+
+    # use_progress: start learning from previous save point
+
+    use_progress: 0
+

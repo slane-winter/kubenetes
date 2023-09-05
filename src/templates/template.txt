@@ -1,0 +1,30 @@
+#!/bin/bash
+#SBATCH --job-name={{slurm_job_name}}
+##SBATCH --nodelist={{slurm_node_list}}
+#SBATCH --partition={{slurm_job_partition}}
+##SBATCH --cpus-per-task={{slurm_cpus_per_node}}
+#SBATCH --gpus-per-node={{slurm_num_gpus_per_node}}
+#SBATCH --nodes={{slurm_num_nodes}}
+#SBATCH --mem={{slurm_mem_per_node}}
+#SBATCH --output={{slurm_path_file}}
+
+master_addr=$(scontrol show hostnames "$SLURM_JOB_NODELIST" | head -n 1)
+export MASTER_ADDR={{slurm_master_address}}
+export MASTER_PORT={{slurm_job_master_port}}
+
+srun enroot start \
+    -m {{path_code_mount}} \
+    -m {{path_data_mount}} \
+    -m {{path_results_mount}} \
+    -m $HOME:$HOME \
+    -e OMP_NUM_THREADS=1 \
+    {{enroot_name}} \
+    torchrun \
+        --nnodes $SLURM_JOB_NUM_NODES \
+        --nproc_per_node $SLURM_GPUS_PER_NODE \
+        --max_restarts 0 \
+        --rdzv_id $SLURM_JOB_ID \
+        --rdzv_backend=c10d \
+        --rdzv_endpoint $MASTER_ADDR:$MASTER_PORT \
+        --node_rank $SLURM_NODEID \
+    {{path_to_main}} --config {{path_to_config}} --deploy {{deploy}} --test {{path_test}} --valid {{path_valid}} --train {{path_train}} --results {{path_results}} --arch {{arch}}

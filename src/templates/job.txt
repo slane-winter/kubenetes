@@ -1,0 +1,46 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{job_name}}
+spec:
+  template:
+    spec:
+      containers:
+        - name: {{job_name}}
+          image: {{path_image}}
+          ports:
+            - containerPort: 8880
+          env:
+            - name: NCCL_SOCKET_IFNAME
+              value: eth0
+            - name: NCCL_DEBUG
+              value: INFO
+          command: ["/bin/sh", "-c"]
+          args: ["git clone https://github.com/slane-winter/kubenetes.git .; cd /develop/code/src; torchrun main.py -config config.yaml -arch {{arch}} -results {{results}} -train {{train}} -valid {{valid}} -test {{test}} > {{log}}"]
+          resources:
+            limits:
+              memory: {{num_mem_lim}}
+              cpu: {{num_cpus}}
+              nvidia.com/gpu: {{num_gpus}}
+            requests:
+              memory: {{num_mem_req}}
+              cpu: {{num_cpus}}
+              nvidia.com/gpu: {{num_gpus}}
+          volumeMounts:
+            - name: demo-results
+              mountPath: /develop/results
+            - name: demo-data
+              mountPath: /develop/data
+
+      volumes:
+        - name: demo-results
+          persistentVolumeClaim:
+            claimName: demo-results
+        - name: demo-data
+          persistentVolumeClaim:
+            claimName: demo-data
+        - name: dshm
+          emptyDir:
+            medium: Memory
+
+      restartPolicy: Never

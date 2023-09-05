@@ -1,0 +1,29 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: data_gen_demo
+spec:
+  template:
+    spec:
+      containers:
+        - name: data_gen_demo
+          image: docker.io/ctvqfq/bunny_ai:demo
+          command: ["/bin/sh", "-c"]
+          args: ["git clone https://github.com/slane-winter/kubenetes.git .; cd /develop/code/src; python main.py"]
+          resources:
+            limits:
+              memory: 32G
+              cpu: 16
+            requests:
+              memory: 16G
+              cpu: 16
+          volumeMounts:
+            - name: demo-data
+              mountPath: /develop/data
+
+      volumes:
+        - name: demo-data
+          persistentVolumeClaim:
+            claimName: demo-data
+
+      restartPolicy: Never

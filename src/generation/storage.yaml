@@ -1,11 +1,11 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: results
+  name: demo-data
 spec:
-  storageClassName: seaweedfs-storage-nvme
+  storageClassName: rook-cephfs
   accessModes:
   - ReadWriteMany
   resources:
     requests:
-      storage: 100Gi
+      storage: 100G
