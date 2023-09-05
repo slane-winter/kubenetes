@@ -91,13 +91,13 @@ def run_generation(params):
 
     for data_name in params["helpers"]["dataset_names"]:
 
-        path_train = os.path.join(params["paths"]["data_root"], data_name, "train")
-        path_valid = os.path.join(params["paths"]["data_root"], data_name, "valid")
-        path_test = os.path.join(params["paths"]["data_root"], data_name, "test")
+        path_train = os.path.join(params["paths"]["root_data"], data_name, "train")
+        path_valid = os.path.join(params["paths"]["root_data"], data_name, "valid")
+        path_test = os.path.join(params["paths"]["root_data"], data_name, "test")
 
         for alg_name in params["helpers"]["algorithm_names"]:
 
-            path_results = os.path.join(params["paths"]["results"], data_name, alg_name)
+            path_results = os.path.join(params["paths"]["root_results"], data_name, alg_name)
 
             # -- Launch jobs if there is room in processing group
 
@@ -111,7 +111,7 @@ def run_generation(params):
 
                     job_name = "%s-%s" % (params["helpers"]["kill_tag"], str(counter).zfill(6))
                     
-                    path_log = os.path.join(params["paths"]["results"], "logs", "%s_%s_%s.log" % (job_name, data_name, alg_name))
+                    path_log = os.path.join(params["paths"]["root_results"], "logs", "%s_%s_%s.log" % (job_name, data_name, alg_name))
 
                     current_group.append(job_name)
 
@@ -129,7 +129,7 @@ def run_generation(params):
 
                                      "arch": alg_name,
 
-                                     "path_image": params["paths"]["container_image"]}
+                                     "image": params["paths"]["container_image"]}
 
                     filled_template = template.render(template_info)
 

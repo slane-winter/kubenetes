@@ -18,10 +18,16 @@ spec:
       volumeMounts:
         - name: demo-data
           mountPath: /develop/data
+        - name: demo-results
+          mountPath: /develop/results
+
   volumes:
     - name: demo-data
       persistentVolumeClaim:
         claimName: demo-data
+    - name: demo-results
+      persistentVolumeClaim:
+        claimName: demo-results
 
   restartPolicy: Never
 

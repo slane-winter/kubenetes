@@ -4,9 +4,8 @@ import os
 import sys
 import torch
 
-path = os.path.dirname(os.path.realpath(sys.argv[0]))
-sys.path.append(path.strip(path.split("/")[-1]) + "network")
-sys.path.append(path.strip(path.split("/")[-1]) + "loading")
+sys.path.append("network")
+sys.path.append("loading")
 
 # Import: Standard Python Libraries
 
@@ -47,22 +46,16 @@ def update_params(params, args):
 
     # Update: System Config
 
-    if(sys.platform == "darwin"):
-        flag = torch.backends.mps.is_available()
-        name = "M1-GPU" if(flag and params["system"]["gpu_config"]["use_gpu"]) else "CPU"
-        num_nodes = 1
-        num_gpus_per_node = 1
+    if(params["system"]["gpu_config"]["use_gpu"]):
+        name = "CUDA"
+        total_num_gpus = os.environ["WORLD_SIZE"]
+        num_gpus_per_node = torch.cuda.device_count() 
+        num_nodes = int(total_num_gpus) // int(num_gpus_per_node)
     else:
-        if(params["system"]["gpu_config"]["use_gpu"]):
-            name = "CUDA"
-            total_num_gpus = os.environ["WORLD_SIZE"]
-            num_gpus_per_node = torch.cuda.device_count() 
-            num_nodes = int(total_num_gpus) // int(num_gpus_per_node)
-        else:
-            name = "CPU"
-            num_nodes = 1
-            total_num_gpus = 0
-            num_gpus_per_node = 1
+        name = "CPU"
+        num_nodes = 1
+        total_num_gpus = 0
+        num_gpus_per_node = 0
 
     params["system"]["gpu_config"]["device"] = name
     params["system"]["gpu_config"]["platform"] = sys.platform
@@ -77,9 +70,6 @@ def update_params(params, args):
     params["dataset"]["path_test"] = params["paths"]["test"]
 
     # Update: Paths Config
-
-    root_name = str(params["network"]["arch"])
-    params["paths"]["results"] = os.path.join(params["paths"]["results"], root_name)
 
     if(os.path.exists(params["paths"]["results"])):
         content = [ele for ele in os.listdir(params["paths"]["results"]) if(".checkpoint" in ele)]
@@ -99,7 +89,6 @@ def update_params(params, args):
     # Update: Network Config
 
     params["network"]["num_classes"] = params["dataset"]["num_classes"]
-    os.environ["TORCH_HOME"] = params["paths"]["pre_trained_models"]
 
 # Validate: Configuration File
 

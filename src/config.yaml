@@ -6,11 +6,11 @@ paths:
 
   # data_root: remote path to algorithm data root folder
 
-  data_root: /develop/data/demo
+  root_data: /develop/data/demo
 
   # results: remote path to root of results folder
 
-  results: /develop/results
+  root_results: /develop/results
  
   # container_image: remote path to container image
 
@@ -55,7 +55,7 @@ helpers:
 
   # parallel_ops: number of jobs happening in parallel (not kubernetes required)
   
-  parallel_ops: 5
+  parallel_ops: 3
 
   # kill_tag: key-phrase that distinguishes jobs from others inside of namespace (not kubernetes required)
   
@@ -127,7 +127,7 @@ network:
 
     # deploy: testing or training network
 
-    deploy: 1
+    deploy: 0
     
     # arch: specified network architecture
 

@@ -88,7 +88,7 @@ def select_network(network_params, system_params):
     
     # Selection: Start Over || Continue
 
-    if(network_params["use_progress"] and rank == 0):
+    if(network_params["use_progress"]):
         model = load_progress(model, network_params["path_network"], system_params["gpu_config"], rank)
 
     network_params["rank"] = rank

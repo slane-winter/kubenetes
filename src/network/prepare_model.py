@@ -119,7 +119,6 @@ def run(params):
 
         # - Load pre-trained model
 
-        params["network"]["use_progress"] = 1
         model = select_network(params["network"], params["system"])
 
         # - Display experiment configuration
