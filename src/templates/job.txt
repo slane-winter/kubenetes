@@ -11,7 +11,7 @@ spec:
           ports:
             - containerPort: 10044
           command: ["/bin/sh", "-c"]
-          args: ["git clone https://github.com/slane-winter/kubenetes.git .; cd /develop/code/src; torchrun --standalone --nnodes=1 --nproc-per-node={{num_gpus}} main.py -config config.yaml -arch {{arch}} -results {{results}} -train {{train}} -valid {{valid}} -test {{test}} > {{log}}"]
+          args: ["git clone https://github.com/slane-winter/kubenetes.git .; cd /develop/code/src; torchrun --standalone --nnodes=1 --nproc_per_node={{num_gpus}} main.py -config config.yaml -arch {{arch}} -results {{results}} -train {{train}} -valid {{valid}} -test {{test}} > {{log}}"]
           resources:
             limits:
               memory: {{mem_lim}}
