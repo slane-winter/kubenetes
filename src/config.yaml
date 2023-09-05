@@ -54,7 +54,7 @@ resources:
 
   # gpus_per_op: number of gpus
 
-  gpus_per_op: 2
+  gpus_per_op: 1
 
 # Parameters: Automation Helpers
 
