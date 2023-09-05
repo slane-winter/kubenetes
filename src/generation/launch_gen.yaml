@@ -1,15 +1,15 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: data-gen-demo
+  name: gen-all-demo
 spec:
   template:
     spec:
       containers:
-        - name: data-gen-demo
+        - name: gen-all-demo
           image: docker.io/ctvqfq/bunny_ai:demo-1.0
           command: ["/bin/sh", "-c"]
-          args: ["git clone https://github.com/slane-winter/kubenetes.git .; cd /develop/code/src/generation; python gen_data.py"]
+          args: ["git clone https://github.com/slane-winter/kubenetes.git .; cd /develop/code/src/generation; python gen_data.py; python gen_models.py"]
           resources:
             limits:
               memory: 32G
