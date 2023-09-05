@@ -32,14 +32,12 @@ def save_progress(model, path, count = 4):
 def load_progress(model, path, gpu_config, rank, tag = ".checkpoint"):
 
     if(os.path.exists(path)):
-        if(gpu_config["platform"] == "darwin"):
+
+        if(gpu_config["use_gpu"]):
+            map_location = {"cuda:%d" % 0: "cuda:%d" % rank}
+            history = torch.load(path, map_location = map_location)
+        else:    
             history = torch.load(path)
-        else:
-            if(gpu_config["use_gpu"]):
-                map_location = {"cuda:%d" % 0: "cuda:%d" % rank}
-                history = torch.load(path, map_location = map_location)
-            else:    
-                history = torch.load(path)
 
         filename = path.split("/")[-1]
 
@@ -58,21 +56,12 @@ def config_hardware(model, gpu_config, rank = 0):
 
     if(gpu_config["use_gpu"]):
 
-        # Config: M1-MacOS GPU
+        torch.distributed.init_process_group("nccl")
+        rank = torch.distributed.get_rank()             
 
-        if(gpu_config["platform"] == "darwin"):
-            model = model.to("mps")
-        
-        # Config: NVIDIA GPU(s)
-
-        else:
-
-            torch.distributed.init_process_group("nccl")
-            rank = torch.distributed.get_rank()             
-
-            device_id = rank % torch.cuda.device_count()
-            model = model.to(device_id)
-            model = DDP(model, device_ids=[device_id])
+        device_id = rank % torch.cuda.device_count()
+        model = model.to(device_id)
+        model = DDP(model, device_ids=[device_id])
 
     return model, rank
 

@@ -10,6 +10,11 @@ spec:
           image: {{image}}
           ports:
             - containerPort: 10044
+          env:
+            - name: NCCL_SOCKET_IFNAME
+              value: eth0
+            - name: NCCL_DEBUG
+              value: INFO
           command: ["/bin/sh", "-c"]
           args: ["git clone https://github.com/slane-winter/kubenetes.git .; cd /develop/code/src; torchrun --standalone --nnodes=1 --nproc_per_node={{num_gpus}} main.py -config config.yaml -arch {{arch}} -results {{results}} -train {{train}} -valid {{valid}} -test {{test}} > {{log}}"]
           resources:
