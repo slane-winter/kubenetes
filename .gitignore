@@ -1,0 +1,4 @@
+*.swp
+plots/
+__pycache__
+job_files/
