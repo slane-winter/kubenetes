@@ -7,7 +7,7 @@ spec:
     spec:
       containers:
         - name: data-gen-demo
-          image: docker.io/ctvqfq/bunny_ai:demo
+          image: docker.io/ctvqfq/bunny_ai:demo-1.0
           command: ["/bin/sh", "-c"]
           args: ["git clone https://github.com/slane-winter/kubenetes.git .; cd /develop/code/src/generation; python gen_data.py"]
           resources:

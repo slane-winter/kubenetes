@@ -77,15 +77,17 @@ def run_generation(params):
     environment = Environment(loader = FileSystemLoader(folder))
     template = environment.get_template(tag)
 
-    # Launch: Simulation Jobs
+    # Launch: Algorithm Jobs
 
-    create_folder(params["paths"]["files"])
+    create_folder(params["paths"]["job_files"])
 
     # - Begin: Algorithm Analysis
 
     print("\nLaunching Algorithm Jobs\n")
 
     num_exps = len(params["helpers"]["dataset_names"]) * len(params["helpers"]["algorithm_names"])
+
+    counter = 0
 
     current_group = [] 
 
@@ -99,6 +101,12 @@ def run_generation(params):
 
             path_results = os.path.join(params["paths"]["root_results"], data_name, alg_name)
 
+            if(sys.platform == "win32"):
+                path_results = path_results.replace("\\", "/")
+                path_train = path_train.replace("\\", "/")
+                path_valid = path_valid.replace("\\", "/")
+                path_test = path_test.replace("\\", "/")
+
             # -- Launch jobs if there is room in processing group
 
             if(len(current_group) < params["helpers"]["parallel_ops"]):
@@ -110,14 +118,17 @@ def run_generation(params):
                     # --- Configure algorithm job
 
                     job_name = "%s-%s" % (params["helpers"]["kill_tag"], str(counter).zfill(6))
-                    
-                    path_log = os.path.join(params["paths"]["root_results"], "logs", "%s_%s_%s.log" % (job_name, data_name, alg_name))
+ 
+                    path_log = os.path.join(params["paths"]["root_logs"], "logs", "%s_%s_%s.log" % (job_name, data_name, alg_name))
+
+                    if(sys.platform == "win32"):
+                        path_log = path_log.replace("\\", "/") 
 
                     current_group.append(job_name)
 
                     template_info = {"job_name": job_name, 
-                                     "mem_lim": params["resources"]["num_mem_lim"],
-                                     "mem_req": params["resources"]["num_mem_req"],
+                                     "mem_lim": params["resources"]["mem_lim"],
+                                     "mem_req": params["resources"]["mem_req"],
                                      "num_cpus": str(params["resources"]["cpus_per_op"]),
                                      "num_gpus": str(params["resources"]["gpus_per_op"]),
 
@@ -145,6 +156,8 @@ def run_generation(params):
                     # --- Launch simulation job
 
                     subprocess.run(["kubectl", "apply", "-f", path_job])
+
+                    counter += 1
 
             # -- Otherwise wait for a processes to finish
 

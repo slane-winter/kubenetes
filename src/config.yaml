@@ -4,17 +4,21 @@
 
 paths:
 
-  # data_root: remote path to algorithm data root folder
+  # root_logs: remote path to algorithm log root folder
+  
+  root_logs: /develop/logs
+
+  # root_data: remote path to algorithm data root folder
 
   root_data: /develop/data/demo
 
-  # results: remote path to root of results folder
+  # root_results: remote path to root of results folder
 
   root_results: /develop/results
  
   # container_image: remote path to container image
 
-  container_image: docker.io/ctvqfq/bunny_ai:demo
+  container_image: docker.io/ctvqfq/bunny_ai:demo-1.0
 
   # job_files: local path to job file folder
   
@@ -59,7 +63,7 @@ helpers:
 
   # kill_tag: key-phrase that distinguishes jobs from others inside of namespace (not kubernetes required)
   
-  kill_tag: alg_demo
+  kill_tag: alg-demo
 
   # alg_names: names of algorithm for automation
 
